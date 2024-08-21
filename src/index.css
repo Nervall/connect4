@@ -21,6 +21,9 @@ body {
   min-width: 320px;
   min-height: 100vh;
   -webkit-font-smoothing: antialiased;
+  background-image: url('assets/blocks.jpg'); 
+  background-repeat: no-repeat;
+  background-size: cover;
 }
 
 img, picture, video, canvas, svg {
