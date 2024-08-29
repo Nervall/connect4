@@ -1,12 +1,106 @@
-import './App.css'
+import { useState } from 'react';
+import type { GameState } from './types/types';
+import { COLUMNS } from './utils/constants';
+import { checkDraw, checkWinner, createBoard } from './utils/game';
+import ArrowDown from './assets/arrow-down.svg';
+import './App.css';
+
+const randomizePlayerStart = () => {
+  return Math.floor(Math.random() * 2 + 1);
+}
 
 function App() {
+  const [gameState, setGameState] = useState<GameState>({
+    playerTurn: randomizePlayerStart(),
+    board: createBoard(),
+    player1: { name: 'Player1', color: '#1790c9'},
+    player2: { name: 'Player2', color: '#f8f527'},
+    winner: false,
+    draw: false
+  })
+  const [showArrow, setShowArrow] = useState<number>()
+
+  const changePlayerTurn = () => {
+    return gameState.playerTurn === 1 ? 2 : 1
+  }
+
+
+  const handleTurn = (colIndex: number) => {
+    const newBoard = structuredClone(gameState.board)
+    // find first cell in column that has value 0 (no player assigned to the cell)
+    for (let row = newBoard.length - 1; row >= 0; row = row - 1 ) {
+      const cell = newBoard[row][colIndex];
+      if (cell === 0) {
+          newBoard[row][colIndex] = gameState.playerTurn;
+          const winner = checkWinner(newBoard, gameState.playerTurn)
+          if (winner) {
+            setGameState({ ...gameState, winner: true, board: newBoard })
+            break;
+          }
+          if (row < 1) {
+            const draw = checkDraw(newBoard)
+            if (draw) {
+              setGameState({ ...gameState, draw: true, board: newBoard })
+            }
+          }
+          setGameState({ ...gameState, playerTurn: changePlayerTurn(),  board: newBoard, })
+          break;
+      }
+    }
+  }
+
+  const checkColor = (value: number) => {
+    switch (value) {
+      case 1:
+        return gameState.player1.color;
+      case 2:
+        return gameState.player2.color;
+      default:
+        return '#ffffff';
+    }
+  }
+
+  const showHoveredColumn = (colIndex: number) => {
+    setShowArrow(colIndex)
+  }
 
   return (
-    <div>
-      APP
-    </div>
-
+    <>
+      <p>
+        {gameState.winner ? `Vinnare är ${gameState.playerTurn}`: ''}
+        {gameState.draw ? 'Det blev lika': ''}
+      </p>
+      <p>{gameState.playerTurn === 1 ? gameState.player1.name : gameState.player2.name} tur</p>
+      <div className='showArrow-wrapper'>
+        {Array.from({ length: COLUMNS }, (_column, index) => {
+          return (
+            <span key={index} className='showArrow-column'>{showArrow === index ? <img src={ArrowDown} alt="arrow-down" /> : ''}</span>
+          )
+        })}
+      </div>
+      <section className='board-wrapper'>
+        {gameState.board.map((rows: number[], rowIndex: number) => {
+          return (
+            <div className='board-row' key={'row'+ rowIndex}>
+              {rows.map((cell: number, colIndex: number) => {
+                return (
+                  <button 
+                    disabled={gameState.winner || gameState.draw}
+                    onMouseOver={() => showHoveredColumn(colIndex)} 
+                    className='board-button' 
+                    key={`cell`+ rowIndex + colIndex} 
+                    onClick={() => { handleTurn(colIndex) }} 
+                    type='button'
+                  >
+                    <span className="board-marker" style={{ background: checkColor(cell)}} />
+                  </button>
+                )
+              })}
+            </div>
+        )
+        })}
+      </section>
+    </>
   )
 }
 
