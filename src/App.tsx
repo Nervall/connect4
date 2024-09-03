@@ -3,6 +3,7 @@ import type { GameState } from './types/types';
 import { COLUMNS } from './utils/constants';
 import { checkDraw, checkWinner, createBoard } from './utils/game';
 import ArrowDown from './assets/arrow-down.svg';
+import Input from './components/input';
 import './App.css';
 
 const randomizePlayerStart = () => {
@@ -13,8 +14,10 @@ function App() {
   const [gameState, setGameState] = useState<GameState>({
     playerTurn: randomizePlayerStart(),
     board: createBoard(),
-    player1: { name: 'Player1', color: '#1790c9'},
-    player2: { name: 'Player2', color: '#f8f527'},
+    players:{ 
+     1: { name: 'Player1', color: '#1790c9' },
+     2: { name: 'Player2', color: '#f8f527' },
+    },
     winner: false,
     draw: false
   })
@@ -49,20 +52,29 @@ function App() {
     }
   }
 
-  const checkColor = (value: number) => {
-    switch (value) {
-      case 1:
-        return gameState.player1.color;
-      case 2:
-        return gameState.player2.color;
-      default:
-        return '#ffffff';
-    }
-  }
+  const checkColor = (cellValue: number) => {
+    if (cellValue === 0) {
+      return '#ffffff';
+    };
+    return gameState.players[cellValue].color;
+  };
 
   const showHoveredColumn = (colIndex: number) => {
     setShowArrow(colIndex)
   }
+
+    const updatePlayer = (e: React.ChangeEvent<HTMLInputElement>, playerNumber: number) => {
+      setGameState(prevState => ({
+        ...prevState,
+        players: {
+          ...prevState.players,
+          [playerNumber]: {
+            ...prevState.players[playerNumber],
+            name: e.target.value,
+          }
+        }
+      }));
+    };
 
   return (
     <>
@@ -70,7 +82,19 @@ function App() {
         {gameState.winner ? `Vinnare är ${gameState.playerTurn}`: ''}
         {gameState.draw ? 'Det blev lika': ''}
       </p>
-      <p>{gameState.playerTurn === 1 ? gameState.player1.name : gameState.player2.name} tur</p>
+        <Input 
+          type="text" 
+          name="player1"
+          onChange={(e) => {updatePlayer(e, 1)}} 
+          value={gameState.players[1].name}
+        />
+        <Input 
+          type="text" 
+          name="player2"
+          onChange={(e) => {updatePlayer(e, 2)}} 
+          value={gameState.players[2].name}
+        />
+      <p>{gameState.playerTurn === 1 ? gameState.players[1].name : gameState.players[2].name} tur</p>
       <div className='showArrow-wrapper'>
         {Array.from({ length: COLUMNS }, (_column, index) => {
           return (

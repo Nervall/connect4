@@ -1,16 +1,19 @@
 type Row = number[];
 export type Board = Row[];
 
-export type Player = {
+type PlayerID = number;
+
+type PlayerBody = {
     name: string,
     color: string
-};
+}
+
+export type Player = Record<PlayerID, PlayerBody>
 
 export type GameState = {
     board: Board;
     playerTurn: number,
-    player1: Player,
-    player2: Player,
+    players: Player,
     winner: boolean,
     draw: boolean
 };
