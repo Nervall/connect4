@@ -4,5 +4,6 @@
     width: 225px;
     border-bottom: 2px solid #4ab92e;
     border-radius: 2px;
-    margin-right: 1.5rem;
+    margin: 1.5rem;
+    align-self: center;
 }

@@ -78,10 +78,7 @@ function App() {
 
   return (
     <>
-      <p>
-        {gameState.winner ? `Vinnare är ${gameState.playerTurn}`: ''}
-        {gameState.draw ? 'Det blev lika': ''}
-      </p>
+      <header className='app-header'>
         <Input 
           type="text" 
           name="player1"
@@ -94,7 +91,12 @@ function App() {
           onChange={(e) => {updatePlayer(e, 2)}} 
           value={gameState.players[2].name}
         />
-      <p>{gameState.playerTurn === 1 ? gameState.players[1].name : gameState.players[2].name} tur</p>
+      </header>
+      <p>
+        {gameState.winner ? `Vinnare är ${gameState.playerTurn}`: ''}
+        {gameState.draw ? 'Det blev lika': ''}
+      </p>
+      <h3>{gameState.playerTurn === 1 ? gameState.players[1].name : gameState.players[2].name}s tur</h3>
       <div className='showArrow-wrapper'>
         {Array.from({ length: COLUMNS }, (_column, index) => {
           return (
