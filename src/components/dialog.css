@@ -1,0 +1,20 @@
+.dialog-wrapper {
+  margin: 0 auto;
+  border: 0;
+  min-width: 21rem;
+  min-height: 12.5rem;
+  border-radius: 5px;
+  top: calc(50% - 21rem);
+}
+  
+.dialog-wrapper::backdrop {
+  background: rgba(0, 0, 0, 0.5);
+}
+
+.dialog-wrapper > h3 {
+  margin-top: 1rem;
+}
+
+.dialog-wrapper > button {
+  margin-top: 2rem;
+}
