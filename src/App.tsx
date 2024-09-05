@@ -128,6 +128,7 @@ function App() {
                     key={`cell`+ rowIndex + colIndex} 
                     onClick={() => { handleTurn(colIndex) }} 
                     type='button'
+                    title='place marker'
                   >
                     <span className="board-marker" style={{ background: checkColor(cell)}} />
                   </button>

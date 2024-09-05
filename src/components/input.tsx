@@ -19,6 +19,7 @@ const Input = ({ className, type, name, value, onChange}: InputProps) => {
         minLength={2}
         onChange={(e) => onChange(e)}
         value={value}
+        aria-labelledby="name"
         >
     </input>
   )
