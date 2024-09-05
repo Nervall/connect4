@@ -45,6 +45,7 @@ function App() {
             const draw = checkDraw(newBoard)
             if (draw) {
               setGameState({ ...gameState, draw: true, board: newBoard })
+              break;
             }
           }
           setGameState({ ...gameState, playerTurn: changePlayerTurn(),  board: newBoard, })
