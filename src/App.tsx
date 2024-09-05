@@ -4,6 +4,7 @@ import { COLUMNS } from './utils/constants';
 import { checkDraw, checkWinner, createBoard } from './utils/game';
 import ArrowDown from './assets/arrow-down.svg';
 import Input from './components/input';
+import Dialog from './components/dialog';
 import './App.css';
 
 const randomizePlayerStart = () => {
@@ -63,21 +64,34 @@ function App() {
     setShowArrow(colIndex)
   }
 
-    const updatePlayer = (e: React.ChangeEvent<HTMLInputElement>, playerNumber: number) => {
-      setGameState(prevState => ({
-        ...prevState,
-        players: {
-          ...prevState.players,
-          [playerNumber]: {
-            ...prevState.players[playerNumber],
-            name: e.target.value,
-          }
+  const updatePlayer = (e: React.ChangeEvent<HTMLInputElement>, playerNumber: number) => {
+    setGameState(prevState => ({
+      ...prevState,
+      players: {
+        ...prevState.players,
+        [playerNumber]: {
+          ...prevState.players[playerNumber],
+          name: e.target.value,
         }
-      }));
-    };
+      }
+    }));
+  };
+
+  const handleResetGame = () => {
+    setGameState({ ...gameState, winner: false, draw: false, board: createBoard(), playerTurn: changePlayerTurn()})
+  }
 
   return (
     <>
+      <Dialog isOpen={gameState.winner || gameState.draw} handleClose={handleResetGame}>
+        <h3>{gameState.winner ? 'Grattis!' : 'Nästan!'}</h3>
+        <p>
+          {gameState.winner 
+            ? `Vinnare är ${gameState.players[gameState.playerTurn].name}`
+            : 'Det blev lika i matchen'}
+        </p>
+        <button type="button" onClick={handleResetGame}>Spela ny match</button>
+      </Dialog>
       <header className='app-header'>
         <Input 
           type="text" 
@@ -92,10 +106,6 @@ function App() {
           value={gameState.players[2].name}
         />
       </header>
-      <p>
-        {gameState.winner ? `Vinnare är ${gameState.playerTurn}`: ''}
-        {gameState.draw ? 'Det blev lika': ''}
-      </p>
       <h3>{gameState.playerTurn === 1 ? gameState.players[1].name : gameState.players[2].name}s tur</h3>
       <div className='showArrow-wrapper'>
         {Array.from({ length: COLUMNS }, (_column, index) => {
