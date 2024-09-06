@@ -15,6 +15,12 @@
   justify-content: center;
 }
 
+.app-header > img {
+  position: absolute;
+  left: 0;
+  top: 0;
+}
+
 .showArrow-wrapper {
   display: flex;
   border-left: 8px solid transparent;

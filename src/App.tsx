@@ -3,6 +3,7 @@ import type { GameState } from './types/types';
 import { COLUMNS } from './utils/constants';
 import { checkDraw, checkWinner, createBoard } from './utils/game';
 import ArrowDown from './assets/arrow-down.svg';
+import Logo from './assets/connect4-logo.png';
 import Input from './components/input';
 import Dialog from './components/dialog';
 import './App.css';
@@ -94,6 +95,7 @@ function App() {
         <button type="button" onClick={handleResetGame}>Spela ny match</button>
       </Dialog>
       <header className='app-header'>
+        <img src={Logo} alt='logo' />
         <Input 
           type="text" 
           name="player1"
